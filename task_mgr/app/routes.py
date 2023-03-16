@@ -1,7 +1,7 @@
 from flask import Flask, request
 from app.database import task
 
-app= Flask(__name__)
+app = Flask(__name__)
 
 @app.get("/")
 @app.get("/ping")
@@ -16,7 +16,7 @@ def get_all_tasks():
     task_list = task.scan()
     out = {
         "tasks": task_list,
-        "message": "succes"
+        "message": "success"
     }
     return out
 
@@ -31,29 +31,29 @@ def get_task_by_id(pk):
 
 @app.post("/tasks")
 def create_task():
-    raw_data= request.json
-    task_data= {
+    raw_data = request.json
+    task_data = {
         "summary": raw_data.get("summary"),
         "description": raw_data.get("description"),
-        "status": raw_data.get("status"),
+        "status_id": raw_data.get("status_id"),
         "active": raw_data.get("active")
     }
     task.insert(task_data)
-    return "",204
+    return "", 204
 
 @app.put("/tasks/<int:pk>")
-def create_task():
-    raw_data= request.json
-    task_data= {
+def update_task(pk):
+    raw_data = request.json
+    task_data = {
         "summary": raw_data.get("summary"),
         "description": raw_data.get("description"),
-        "status": raw_data.get("status"),
+        "status_id": raw_data.get("status_id"),
         "active": raw_data.get("active")
     }
-    task.update(task_data)
-    return "",204
+    task.update(task_data, pk)
+    return "", 204
 
-@app.delete ("/tasks/<int:pk>")
+@app.delete("/tasks/<int:pk>")
 def delete_task(pk):
     task.delete(pk)
     return "", 204
